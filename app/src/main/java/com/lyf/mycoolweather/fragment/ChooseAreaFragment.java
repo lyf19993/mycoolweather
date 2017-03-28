@@ -1,6 +1,7 @@
 package com.lyf.mycoolweather.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lyf.mycoolweather.R;
+import com.lyf.mycoolweather.activity.WeatherActivity;
 import com.lyf.mycoolweather.db.City;
 import com.lyf.mycoolweather.db.County;
 import com.lyf.mycoolweather.db.Province;
@@ -105,6 +107,12 @@ public class ChooseAreaFragment extends BaseFragment implements AdapterView.OnIt
         } else if (currentLevel == LEVEL_CITY) {
             selectCity = cityList.get(i);
             querCounty();
+        }else if (currentLevel == LEVEL_COUNTY) {
+                String weatherId = countyList.get(i).getWeatherId();
+            Intent intent = new Intent(getActivity(), WeatherActivity.class);
+            intent.putExtra("weather_id",weatherId);
+            startActivity(intent);
+            getActivity().finish();
         }
     }
 
