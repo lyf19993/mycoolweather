@@ -1,16 +1,13 @@
 package com.lyf.mycoolweather.fragment;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import com.lyf.mycoolweather.MainActivity;
 
 import butterknife.ButterKnife;
 
@@ -21,14 +18,13 @@ import butterknife.ButterKnife;
  */
 
 public abstract class BaseFragment extends Fragment {
-    protected MainActivity mActivity;
+
     //根布局
     private View mViewRoot;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mActivity = (MainActivity) activity;
     }
 
 
@@ -44,7 +40,6 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //判断是否为空，为空的时候去加载布局，onCreateView在界面切换的时候被多次调用，防止界面跳转回来的时候显示空白
         if (mViewRoot == null) {
-            // mViewRoot = createView(inflater,container,savedInstanceState);
             mViewRoot = addLayout(inflater);
         }
         ButterKnife.bind(this, mViewRoot);
@@ -82,15 +77,6 @@ public abstract class BaseFragment extends Fragment {
             }
         }
     }
-
-    /**
-     * 每个fragment要现实的根布局不一样，所以用抽象方法去加载布局
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
-     *//*
-    abstract protected  View createView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState);*/
 
 
 

@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lyf.mycoolweather.MainActivity;
 import com.lyf.mycoolweather.R;
 import com.lyf.mycoolweather.activity.WeatherActivity;
 import com.lyf.mycoolweather.db.City;
@@ -80,7 +81,7 @@ public class ChooseAreaFragment extends BaseFragment implements AdapterView.OnIt
 
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
-        adapter = new ArrayAdapter<String>(mActivity, android.R.layout.simple_list_item_1, datas);
+        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, datas);
         lv.setAdapter(adapter);
         lv.setOnItemClickListener(this);
         bt_back.setOnClickListener(new View.OnClickListener() {
@@ -107,12 +108,20 @@ public class ChooseAreaFragment extends BaseFragment implements AdapterView.OnIt
         } else if (currentLevel == LEVEL_CITY) {
             selectCity = cityList.get(i);
             querCounty();
-        }else if (currentLevel == LEVEL_COUNTY) {
-                String weatherId = countyList.get(i).getWeatherId();
-            Intent intent = new Intent(getActivity(), WeatherActivity.class);
-            intent.putExtra("weather_id",weatherId);
-            startActivity(intent);
-            getActivity().finish();
+        } else if (currentLevel == LEVEL_COUNTY) {
+            String weatherId = countyList.get(i).getWeatherId();
+            if (getActivity() instanceof MainActivity) {
+                Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                intent.putExtra("weather_id", weatherId);
+                startActivity(intent);
+                getActivity().finish();
+            }else if (getActivity() instanceof WeatherActivity) {
+                WeatherActivity weatherActivity = (WeatherActivity) getActivity();
+                weatherActivity.drawerLayout.closeDrawers();
+                weatherActivity.refreshLayout.setRefreshing(true);
+                weatherActivity.requestWeather(weatherId);
+            }
+
         }
     }
 
@@ -122,7 +131,7 @@ public class ChooseAreaFragment extends BaseFragment implements AdapterView.OnIt
     private void querCounty() {
         tv_title.setText(selectCity.getCityName());
         bt_back.setVisibility(View.VISIBLE);
-        countyList = DataSupport.where("cityid=?",String.valueOf(selectCity.getId())).find(County.class);
+        countyList = DataSupport.where("cityid=?", String.valueOf(selectCity.getId())).find(County.class);
         if (countyList.size() > 0) {
             datas.clear();
             for (County county : countyList) {
@@ -147,7 +156,7 @@ public class ChooseAreaFragment extends BaseFragment implements AdapterView.OnIt
     private void querCities() {
         tv_title.setText(selectProvince.getProvinceName());
         bt_back.setVisibility(View.VISIBLE);
-        cityList = DataSupport.where("provinceid=?",String.valueOf(selectProvince.getId())).find(City.class);
+        cityList = DataSupport.where("provinceid=?", String.valueOf(selectProvince.getId())).find(City.class);
         if (cityList.size() > 0) {
             datas.clear();
             for (City city : cityList) {
@@ -207,7 +216,7 @@ public class ChooseAreaFragment extends BaseFragment implements AdapterView.OnIt
                     @Override
                     public void run() {
                         closeDialog();
-                        Toast.makeText(getActivity(),"记载失败",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "记载失败", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
