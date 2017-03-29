@@ -1,6 +1,7 @@
 package com.lyf.mycoolweather.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -23,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.lyf.mycoolweather.R;
 import com.lyf.mycoolweather.bean.Forecast;
 import com.lyf.mycoolweather.bean.Weather;
+import com.lyf.mycoolweather.service.AutoUpdateService;
 import com.lyf.mycoolweather.util.Utility;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -259,10 +261,14 @@ public class WeatherActivity extends Activity {
         String comfort = "舒适度：" + weather.suggestion.comfort.info;
         String carWash = "洗车指数：" + weather.suggestion.carWash.info;
         String sport = "运动建议" + weather.suggestion.sport.info;
+
         comfortText.setText(comfort);
         carWashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+
+        Intent intent = new Intent(this, AutoUpdateService.class);
+        startService(intent);
 
 
     }
