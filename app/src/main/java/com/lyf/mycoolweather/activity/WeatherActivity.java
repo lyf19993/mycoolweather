@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +39,7 @@ import okhttp3.Call;
  * 天气activity
  */
 
-public class WeatherActivity extends Activity {
+public class WeatherActivity extends AppCompatActivity {
     @Bind(R.id.weather_layout)
     ScrollView weatherLayout;
     //城市
